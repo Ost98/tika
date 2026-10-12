@@ -1,0 +1,128 @@
+package org.apache.tika.mime;
+
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.Patterns;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Comparator;
+
+@ExtendWith(MockitoExtension.class)
+public class Patterns_add_1_0_Test {
+
+    @Mock
+    private MediaTypeRegistry registry;
+
+    @Mock
+    private MimeType mimeType;
+
+    private Patterns patterns;
+
+    @BeforeEach
+    public void setUp() {
+        patterns = new Patterns(registry);
+    }
+
+    @Test
+    public void testAddWithJavaRegex() throws MimeTypeException {
+        String pattern = "java";
+        boolean isJavaRegex = true;
+        when(mimeType.getType()).thenReturn(MediaType.parse("application/java"));
+        patterns.add(pattern, isJavaRegex, mimeType);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(patterns).addGlob(pattern, mimeType);
+    }
+
+    @Test
+    public void testAddWithoutJavaRegexAndNoGlob() throws MimeTypeException {
+        String pattern = "file.txt";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, isJavaRegex, mimeType);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(patterns).addName(pattern, mimeType);
+    }
+
+    @Test
+    public void testAddWithoutJavaRegexAndExtension() throws MimeTypeException {
+        String pattern = "*.txt";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, isJavaRegex, mimeType);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(patterns).addExtension("txt", mimeType);
+    }
+
+    @Test
+    public void testAddWithoutJavaRegexAndGlob() throws MimeTypeException {
+        String pattern = "file.*";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, isJavaRegex, mimeType);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(patterns).addGlob(".*", mimeType);
+    }
+
+    @Test
+    public void testAddWithNullPattern() {
+        String pattern = null;
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        assertThrows(IllegalArgumentException.class, () -> patterns.add(pattern, isJavaRegex, mimeType));
+    }
+
+    @Test
+    public void testAddWithNullMimeType() throws MimeTypeException {
+        String pattern = "file.txt";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        assertThrows(IllegalArgumentException.class, () -> patterns.add(pattern, isJavaRegex, null));
+    }
+
+    @Test
+    public void testAddWithConflictNamePattern() throws MimeTypeException {
+        String pattern = "file";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(patterns.names.get(pattern)).thenReturn(mimeType);
+        assertThrows(MimeTypeException.class, () -> patterns.add(pattern, isJavaRegex, mimeType));
+    }
+
+    @Test
+    public void testAddWithConflictExtensionPattern() throws MimeTypeException {
+        String pattern = "txt";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(patterns.extensions.get(pattern)).thenReturn(mimeType);
+        assertThrows(MimeTypeException.class, () -> patterns.add(pattern, isJavaRegex, mimeType));
+    }
+
+    @Test
+    public void testAddWithConflictGlobPattern() throws MimeTypeException {
+        String pattern = "file.*";
+        boolean isJavaRegex = false;
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(patterns.globs.get(".*")).thenReturn(mimeType);
+        assertThrows(MimeTypeException.class, () -> patterns.add(pattern, isJavaRegex, mimeType));
+    }
+}
+
+--------------------------------------------
+Error in Patterns_add_1_0_Test: line 44 : addGlob(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_1_0_Test: line 54 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_1_0_Test: line 64 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_1_0_Test: line 74 : addGlob(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_1_0_Test: line 98 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_1_0_Test: line 107 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_1_0_Test: line 116 : globs has private access in org.apache.tika.mime.Patterns

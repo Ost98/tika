@@ -1,0 +1,155 @@
+[INFO] Maveniverse Nisse 0.9.4 loaded
+[INFO] Nisse injecting 32 properties into User Properties
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.apache.tika:tika-parent:pom:4.0.0-SNAPSHOT
+[WARNING] 'version' contains an expression but should be a constant. @ org.apache.tika:tika-parent:${revision}, C:\Users\david\Desktop\Informatique\IFT3913 - Qualite de logiciels\tika\tika-parent\pom.xml, line 34, column 12
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for org.apache.tika:tika:pom:4.0.0-SNAPSHOT
+[WARNING] 'version' contains an expression but should be a constant. @ org.apache.tika:tika-parent:${revision}, C:\Users\david\Desktop\Informatique\IFT3913 - Qualite de logiciels\tika\tika-parent\pom.xml, line 34, column 12
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] No need for inlining
+[INFO] 
+[INFO] ---------------------< org.apache.tika:tika-core >----------------------
+[INFO] Building Apache Tika core 4.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- chatunitest:2.1.1:class (default-cli) @ tika-core ---
+[INFO] 
+========================== Configuration ==========================
+
+[INFO] PluginSign >>>>CHATUNITEST
+[INFO]  Multithreading >>>> true
+[INFO]  - Class threads: 1, Method threads: 2
+[INFO]  Stop when success >>>> true
+[INFO]  No execution >>>> false
+[INFO]  Enable Merge >>>> true
+[INFO]  --- 
+[INFO]  TestOutput Path >>> C:\Users\david\Desktop\Informatique\IFT3913 - Qualite de logiciels\tika\tika-core\chatunitest-tests\tika-parent\tika-core
+[INFO]  TmpOutput Path >>> C:\Users\david\Desktop\Informatique\IFT3913 - Qualite de logiciels\tika\tika-core\target\chatunitest-info\tika-parent\tika-core
+[INFO]  CounterExample Path >>> C:\Users\david\Desktop\Informatique\IFT3913 - Qualite de logiciels\tika\tika-core\smartut-tests
+[INFO]  Prompt path >>> null
+[INFO]  Example path >>> C:\Users\david\Desktop\Informatique\IFT3913 - Qualite de logiciels\tika\tika-core\exampleUsage.json
+[INFO]  --- 
+[INFO]  Model >>> CODE_LLAMA
+[INFO]  Url >>> http://localhost:11434/v1/chat/completions
+[INFO]  MaxPromptTokens >>> 10923
+[INFO]  MaxResponseTokens >>> 1024
+[INFO]  MinErrorTokens >>> 500
+[INFO]  MaxThreads >>> 2
+[INFO]  TestNumber >>> 2
+[INFO]  MaxRounds >>> 3
+[INFO]  MinErrorTokens >>> 500
+[INFO]  MaxPromptTokens >>> 10923
+[INFO]  SleepTime >>> 0
+[INFO]  DependencyDepth >>> 1
+[INFO]  SampleSize >>> 10
+[INFO]  PhaseType >>> CHATUNITEST
+[INFO] 
+===================================================================
+
+[INFO] 
+==========================
+[CHATUNITEST] Parse output already exists, skip parsing!
+[INFO] 
+==========================
+[CHATUNITEST] Generating tests for class < Patterns > ...
+[INFO] 
+==========================
+[CHATUNITEST] Generating test for method < add > number 0...
+
+[INFO] 
+==========================
+[CHATUNITEST] Generating test for method < add > number 0...
+
+[INFO] Generating test for method < add > round 0 ...
+[INFO] Generating test for method < add > round 0 ...
+[INFO] Test for method < add > compilation failed round 0
+[INFO] Fixing test for method < add > round 1 ...
+[INFO] Test for method < add > compilation failed round 0
+[INFO] Fixing test for method < add > round 1 ...
+[INFO] Test for method < add > compilation failed round 1
+[INFO] Fixing test for method < add > round 2 ...
+[INFO] Test for method < add > compilation failed round 1
+[INFO] Fixing test for method < add > round 2 ...
+[INFO] Test for method < add > compilation failed round 2
+[INFO] 
+==========================
+[CHATUNITEST] Generating test for method < add > number 1...
+
+[INFO] Generating test for method < add > round 0 ...
+[INFO] Test for method < add > compilation failed round 2
+[INFO] 
+==========================
+[CHATUNITEST] Generating test for method < add > number 1...
+
+[INFO] Generating test for method < add > round 0 ...
+[INFO] Test for method < add > compilation failed round 0
+[INFO] Fixing test for method < add > round 1 ...
+[INFO] Test for method < add > compilation failed round 0
+[INFO] Fixing test for method < add > round 1 ...
+[INFO] Test for method < add > compilation failed round 1
+[INFO] Fixing test for method < add > round 2 ...
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\david\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.7\byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+[INFO] Processed test for method < add > generated successfully round 1
+[INFO] 
+==========================
+[CHATUNITEST] Completed Method Jobs:   [ 1 /  0]
+[INFO] 
+==========================
+[CHATUNITEST] Generating test for method < matches > number 0...
+
+[INFO] Generating test for method < matches > round 0 ...
+[INFO] Test for method < add > compilation failed round 2
+[INFO] 
+==========================
+[CHATUNITEST] Completed Method Jobs:   [ 2 /  0]
+Processed add(String, MimeType)
+Processed add(String, boolean, MimeType)
+Skip method: addName(String, MimeType) in class: org.apache.tika.mime.Patterns
+Skip method: addExtension(String, MimeType) in class: org.apache.tika.mime.Patterns
+Skip method: addGlob(String, MimeType) in class: org.apache.tika.mime.Patterns
+[INFO] Test for method < matches > compilation failed round 0
+[INFO] Fixing test for method < matches > round 1 ...
+[INFO] Test for method < matches > compilation failed round 1
+[INFO] Fixing test for method < matches > round 2 ...
+[INFO] Test for method < matches > compilation failed round 2
+[INFO] 
+==========================
+[CHATUNITEST] Generating test for method < matches > number 1...
+
+[INFO] Generating test for method < matches > round 0 ...
+[INFO] Test for method < matches > compilation failed round 0
+[INFO] Fixing test for method < matches > round 1 ...
+[INFO] Test for method < matches > compilation failed round 1
+[INFO] Fixing test for method < matches > round 2 ...
+[INFO] Test for method < matches > compilation failed round 2
+[INFO] 
+==========================
+[CHATUNITEST] Completed Method Jobs:   [ 3 /  0]
+Processed matches(String)
+Skip method: compile(String) in class: org.apache.tika.mime.Patterns
+Skip method: Patterns(MediaTypeRegistry) in class: org.apache.tika.mime.Patterns
+[INFO] 
+==========================
+[CHATUNITEST] Generation finished
+[INFO] 
+==========================
+[CHATUNITEST] Test processed
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:04 min
+[INFO] Finished at: 2026-10-12T13:17:24-04:00
+[INFO] ------------------------------------------------------------------------

@@ -1,0 +1,87 @@
+package org.apache.tika.mime;
+
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+class Patterns_matches_5_0_Test {
+
+    private Patterns patterns;
+
+    private MediaTypeRegistry registry;
+
+    private Map<String, MimeType> names;
+
+    private Map<String, MimeType> extensions;
+
+    private SortedMap<String, MimeType> globs;
+
+    @BeforeEach
+    void setUp() {
+        registry = Mockito.mock(MediaTypeRegistry.class);
+        names = new HashMap<>();
+        extensions = new HashMap<>();
+        globs = new TreeMap<>(new Comparator<String>() {
+
+            @Override
+            public int compare(String o1, String o2) {
+                return 0;
+            }
+        });
+        patterns = new Patterns(registry);
+        patterns.names = names;
+        patterns.extensions = extensions;
+        patterns.globs = globs;
+    }
+
+    @Test
+    void testMatches_ExactMatch() {
+        MimeType mimeType = new MimeType("text/plain");
+        names.put("example.txt", mimeType);
+        assertEquals(mimeType, patterns.matches("example.txt"));
+    }
+
+    @Test
+    void testMatches_ExtensionMatch() {
+        MimeType mimeType = new MimeType("image/png");
+        extensions.put("png", mimeType);
+        assertEquals(mimeType, patterns.matches("example.png"));
+    }
+
+    @Test
+    void testMatches_RegexpMatch() {
+        MimeType mimeType = new MimeType("application/pdf");
+        globs.put(".*\\.pdf", mimeType);
+        assertEquals(mimeType, patterns.matches("example.pdf"));
+    }
+
+    @Test
+    void testMatches_NoMatch() {
+        assertNull(patterns.matches("example.exe"));
+    }
+
+    @Test
+    void testMatches_NullInput() {
+        assertThrows(IllegalArgumentException.class, () -> patterns.matches(null));
+    }
+}
+
+--------------------------------------------
+Error in Patterns_matches_5_0_Test: line 43 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_0_Test: line 44 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_0_Test: line 45 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_0_Test: line 50 : incompatible types: java.lang.String cannot be converted to org.apache.tika.mime.MediaType
+Error in Patterns_matches_5_0_Test: line 57 : incompatible types: java.lang.String cannot be converted to org.apache.tika.mime.MediaType
+Error in Patterns_matches_5_0_Test: line 64 : incompatible types: java.lang.String cannot be converted to org.apache.tika.mime.MediaType
+Error in Patterns_matches_5_0_Test: line -1 : Some messages have been simplified; recompile with -Xdiags:verbose to get full output

@@ -1,0 +1,124 @@
+package org.apache.tika.mime;
+
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.Patterns;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Comparator;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+public class Patterns_add_1_1_Test {
+
+    private Patterns patterns;
+
+    private MediaTypeRegistry registry;
+
+    @BeforeEach
+    public void setUp() {
+        registry = mock(MediaTypeRegistry.class);
+        patterns = new Patterns(registry);
+    }
+
+    @Test
+    public void testAddWithJavaRegex() throws MimeTypeException {
+        MimeType type = mock(MimeType.class);
+        when(type.getType()).thenReturn(MediaType.parse("application/json"));
+        patterns.add("application/json", true, type);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(globs, times(1)).put("application/json", type);
+    }
+
+    @Test
+    public void testAddWithNamePattern() throws MimeTypeException {
+        MimeType type = mock(MimeType.class);
+        when(type.getType()).thenReturn(MediaType.parse("application/json"));
+        patterns.add("example.json", false, type);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(names, times(1)).put("example.json", type);
+    }
+
+    @Test
+    public void testAddWithExtensionPattern() throws MimeTypeException {
+        MimeType type = mock(MimeType.class);
+        when(type.getType()).thenReturn(MediaType.parse("application/json"));
+        patterns.add("*.json", false, type);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(extensions, times(1)).put("json", type);
+    }
+
+    @Test
+    public void testAddWithConflictingNamePattern() throws MimeTypeException {
+        MimeType type1 = mock(MimeType.class);
+        when(type1.getType()).thenReturn(MediaType.parse("application/json"));
+        MimeType type2 = mock(MimeType.class);
+        when(type2.getType()).thenReturn(MediaType.parse("application/xml"));
+        patterns.add("example.json", false, type1);
+        assertThrows(MimeTypeException.class, () -> patterns.add("example.json", false, type2));
+    }
+
+    @Test
+    public void testAddWithConflictingExtensionPattern() throws MimeTypeException {
+        MimeType type1 = mock(MimeType.class);
+        when(type1.getType()).thenReturn(MediaType.parse("application/json"));
+        MimeType type2 = mock(MimeType.class);
+        when(type2.getType()).thenReturn(MediaType.parse("application/xml"));
+        patterns.add("*.json", false, type1);
+        assertThrows(MimeTypeException.class, () -> patterns.add("*.json", false, type2));
+    }
+
+    @Test
+    public void testAddWithConflictingGlobPattern() throws MimeTypeException {
+        MimeType type1 = mock(MimeType.class);
+        when(type1.getType()).thenReturn(MediaType.parse("application/json"));
+        MimeType type2 = mock(MimeType.class);
+        when(type2.getType()).thenReturn(MediaType.parse("application/xml"));
+        patterns.add("example.*", false, type1);
+        assertThrows(MimeTypeException.class, () -> patterns.add("example.*", false, type2));
+    }
+
+    @Test
+    public void testAddWithNullPattern() {
+        MimeType type = mock(MimeType.class);
+        when(type.getType()).thenReturn(MediaType.parse("application/json"));
+        assertThrows(IllegalArgumentException.class, () -> patterns.add(null, false, type));
+    }
+
+    @Test
+    public void testAddWithNullType() throws MimeTypeException {
+        patterns.add("example.json", false, null);
+        verify(registry, never()).isSpecializationOf(any(), any());
+        verify(globs, never()).put(anyString(), any());
+        verify(names, never()).put(anyString(), any());
+        verify(extensions, never()).put(anyString(), any());
+    }
+}
+
+--------------------------------------------
+Error in Patterns_add_1_1_Test: line 38 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_add_1_1_Test
+Error in Patterns_add_1_1_Test: line 47 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_add_1_1_Test
+Error in Patterns_add_1_1_Test: line 56 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_add_1_1_Test
+Error in Patterns_add_1_1_Test: line 100 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_add_1_1_Test
+Error in Patterns_add_1_1_Test: line 101 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_add_1_1_Test
+Error in Patterns_add_1_1_Test: line 102 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_add_1_1_Test

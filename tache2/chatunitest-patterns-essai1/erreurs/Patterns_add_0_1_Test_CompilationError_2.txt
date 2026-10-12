@@ -1,0 +1,150 @@
+package org.apache.tika.mime;
+
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import org.apache.tika.mime.LengthComparator;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeException;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypeRegistry;
+import org.apache.tika.mime.Patterns;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class Patterns_add_0_1_Test {
+
+    @Mock
+    private MediaTypeRegistry registry;
+
+    @Mock
+    private MimeType mimeType;
+
+    private Patterns patterns;
+
+    @BeforeEach
+    public void setUp() {
+        patterns = new Patterns(registry);
+    }
+
+    @Test
+    public void testAdd() throws Exception {
+        String pattern = "text/plain";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(mimeType.getName()).thenReturn("text/plain");
+        when(mimeType.getDescription()).thenReturn("Plain text");
+        when(mimeType.getAcronym()).thenReturn("TXT");
+        when(mimeType.getUniformTypeIdentifier()).thenReturn("public.plain-text");
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).getType();
+        verify(mimeType, times(1)).getName();
+        verify(mimeType, times(1)).getDescription();
+        verify(mimeType, times(1)).getAcronym();
+        verify(mimeType, times(1)).getUniformTypeIdentifier();
+        verify(mimeType, times(1)).addExtension("txt");
+        assertTrue(patterns.names.containsKey("text/plain"));
+        assertTrue(patterns.extensions.containsKey("txt"));
+        assertTrue(patterns.globs.containsKey("text/plain"));
+    }
+
+    @Test
+    public void testAddWithJavaRegex() throws Exception {
+        String pattern = "java\\.regex";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(mimeType.getName()).thenReturn("text/plain");
+        when(mimeType.getDescription()).thenReturn("Plain text");
+        when(mimeType.getAcronym()).thenReturn("TXT");
+        when(mimeType.getUniformTypeIdentifier()).thenReturn("public.plain-text");
+        patterns.add(pattern, true, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).getType();
+        verify(mimeType, times(1)).getName();
+        verify(mimeType, times(1)).getDescription();
+        verify(mimeType, times(1)).getAcronym();
+        verify(mimeType, times(1)).getUniformTypeIdentifier();
+        verify(mimeType, times(1)).addExtension("java\\.regex");
+        assertTrue(patterns.names.containsKey("java\\.regex"));
+        assertTrue(patterns.extensions.containsKey("java\\.regex"));
+        assertTrue(patterns.globs.containsKey("java\\.regex"));
+    }
+
+    @Test
+    public void testAddWithExtension() throws Exception {
+        String pattern = "*.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(mimeType.getName()).thenReturn("text/plain");
+        when(mimeType.getDescription()).thenReturn("Plain text");
+        when(mimeType.getAcronym()).thenReturn("TXT");
+        when(mimeType.getUniformTypeIdentifier()).thenReturn("public.plain-text");
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).getType();
+        verify(mimeType, times(1)).getName();
+        verify(mimeType, times(1)).getDescription();
+        verify(mimeType, times(1)).getAcronym();
+        verify(mimeType, times(1)).getUniformTypeIdentifier();
+        verify(mimeType, times(1)).addExtension("txt");
+        assertTrue(patterns.names.containsKey("text/plain"));
+        assertTrue(patterns.extensions.containsKey("txt"));
+        assertTrue(patterns.globs.containsKey("text/plain"));
+    }
+
+    @Test
+    public void testAddWithInvalidPattern() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            patterns.add(null, mimeType);
+        });
+    }
+
+    @Test
+    public void testAddWithInvalidMimeType() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            patterns.add("text/plain", null);
+        });
+    }
+
+    @Test
+    public void testAddWithReflection() throws Exception {
+        String pattern = "text/plain";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        when(mimeType.getName()).thenReturn("text/plain");
+        when(mimeType.getDescription()).thenReturn("Plain text");
+        when(mimeType.getAcronym()).thenReturn("TXT");
+    }
+}
+
+--------------------------------------------
+Error in Patterns_add_0_1_Test: line 16 : cannot find symbol
+  symbol:   class LengthComparator
+  location: package org.apache.tika.mime
+Error in Patterns_add_0_1_Test: line 18 : cannot find symbol
+  symbol:   class MediaTypeException
+  location: package org.apache.tika.mime
+Error in Patterns_add_0_1_Test: line 20 : cannot find symbol
+  symbol:   class MimeTypeRegistry
+  location: package org.apache.tika.mime
+Error in Patterns_add_0_1_Test: line 61 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 62 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 63 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 82 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 83 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 84 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 103 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 104 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_1_Test: line 105 : globs has private access in org.apache.tika.mime.Patterns

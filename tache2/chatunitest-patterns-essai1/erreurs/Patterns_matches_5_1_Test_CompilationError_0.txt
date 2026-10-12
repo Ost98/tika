@@ -1,0 +1,175 @@
+package org.apache.tika.mime;
+
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+@ExtendWith(MockitoExtension.class)
+public class Patterns_matches_5_1_Test {
+
+    @Mock
+    private MediaTypeRegistry registry;
+
+    @Mock
+    private MimeType mimeType;
+
+    private Patterns patterns;
+
+    @BeforeEach
+    public void setUp() {
+        patterns = new Patterns(registry);
+    }
+
+    @Test
+    public void testMatchesExactMatch() {
+        when(registry.getTypes()).thenReturn(new TreeSet<>());
+        when(names.containsKey("text/plain")).thenReturn(true);
+        when(names.get("text/plain")).thenReturn(mimeType);
+        MimeType result = patterns.matches("text/plain");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        verify(names, times(1)).containsKey("text/plain");
+        verify(names, times(1)).get("text/plain");
+    }
+
+    @Test
+    public void testMatchesExtensionMatch() {
+        when(registry.getTypes()).thenReturn(new TreeSet<>());
+        when(names.containsKey("text/plain")).thenReturn(false);
+        when(extensions.containsKey(".txt")).thenReturn(true);
+        when(extensions.get(".txt")).thenReturn(mimeType);
+        MimeType result = patterns.matches("example.txt");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        verify(names, times(1)).containsKey("example.txt");
+        verify(extensions, times(1)).containsKey(".txt");
+        verify(extensions, times(1)).get(".txt");
+    }
+
+    @Test
+    public void testMatchesGlobMatch() {
+        when(registry.getTypes()).thenReturn(new TreeSet<>());
+        when(names.containsKey("text/plain")).thenReturn(false);
+        when(extensions.containsKey(".txt")).thenReturn(false);
+        when(globs.containsKey(".*\\.txt")).thenReturn(true);
+        when(globs.get(".*\\.txt")).thenReturn(mimeType);
+        MimeType result = patterns.matches("example.txt");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        verify(names, times(1)).containsKey("example.txt");
+        verify(extensions, times(1)).containsKey(".txt");
+        verify(globs, times(1)).containsKey(".*\\.txt");
+        verify(globs, times(1)).get(".*\\.txt");
+    }
+
+    @Test
+    public void testMatchesNoMatch() {
+        when(registry.getTypes()).thenReturn(new TreeSet<>());
+        when(names.containsKey("text/plain")).thenReturn(false);
+        when(extensions.containsKey(".txt")).thenReturn(false);
+        when(globs.containsKey(".*\\.txt")).thenReturn(false);
+        MimeType result = patterns.matches("example.txt");
+        assertNull(result);
+        verify(registry, never()).getTypes();
+        verify(names, times(1)).containsKey("example.txt");
+        verify(extensions, times(1)).containsKey(".txt");
+        verify(globs, times(1)).containsKey(".*\\.txt");
+    }
+}
+
+--------------------------------------------
+Error in Patterns_matches_5_1_Test: line 36 : cannot find symbol
+  symbol:   class TreeSet
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 37 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 38 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 42 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 43 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 48 : cannot find symbol
+  symbol:   class TreeSet
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 49 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 50 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 51 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 55 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 56 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 57 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 62 : cannot find symbol
+  symbol:   class TreeSet
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 63 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 64 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 65 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 66 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 70 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 71 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 72 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 73 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 78 : cannot find symbol
+  symbol:   class TreeSet
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 79 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 80 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 81 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 85 : cannot find symbol
+  symbol:   variable names
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 86 : cannot find symbol
+  symbol:   variable extensions
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 87 : cannot find symbol
+  symbol:   variable globs
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test

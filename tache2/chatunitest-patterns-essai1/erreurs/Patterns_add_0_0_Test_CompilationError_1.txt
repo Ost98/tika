@@ -1,0 +1,145 @@
+package org.apache.tika.mime;
+
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.apache.tika.mime.MimeTypeException;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Comparator;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class Patterns_add_0_0_Test {
+
+    private Patterns patterns;
+
+    private MediaTypeRegistry registry;
+
+    private MimeType mimeType;
+
+    @BeforeEach
+    public void setUp() {
+        registry = mock(MediaTypeRegistry.class);
+        mimeType = mock(MimeType.class);
+        patterns = new Patterns(registry);
+    }
+
+    @Test
+    public void testAddWithValidPatternAndMimeType() throws MimeTypeException {
+        String pattern = "example.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).addExtension(eq("txt"));
+        verify(patterns, never()).addName(anyString(), any(MimeType.class));
+        verify(patterns, never()).addExtension(anyString(), any(MimeType.class));
+        verify(patterns, never()).addGlob(anyString(), anyBoolean(), any(MimeType.class));
+    }
+
+    @Test
+    public void testAddWithNullPattern() {
+        String pattern = null;
+        assertThrows(IllegalArgumentException.class, () -> patterns.add(pattern, mimeType));
+    }
+
+    @Test
+    public void testAddWithNullMimeType() {
+        String pattern = "example.txt";
+        assertThrows(IllegalArgumentException.class, () -> patterns.add(pattern, null));
+    }
+
+    @Test
+    public void testAddWithJavaRegexPattern() throws MimeTypeException {
+        String pattern = ".*\\.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, never()).addExtension(anyString());
+        verify(patterns, never()).addName(anyString(), any(MimeType.class));
+        verify(patterns, never()).addExtension(anyString(), any(MimeType.class));
+        verify(patterns, times(1)).addGlob(eq(pattern), eq(mimeType));
+    }
+
+    @Test
+    public void testAddWithNoWildcardPattern() throws MimeTypeException {
+        String pattern = "example.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).addExtension(eq("txt"));
+        verify(patterns, times(1)).addName(eq(pattern), eq(mimeType));
+        verify(patterns, never()).addExtension(anyString(), any(MimeType.class));
+        verify(patterns, never()).addGlob(anyString(), anyBoolean(), any(MimeType.class));
+    }
+
+    @Test
+    public void testAddWithSingleExtensionPattern() throws MimeTypeException {
+        String pattern = "*.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).addExtension(eq("txt"));
+        verify(patterns, never()).addName(anyString(), any(MimeType.class));
+        verify(patterns, times(1)).addExtension(eq("txt"), eq(mimeType));
+        verify(patterns, never()).addGlob(anyString(), anyBoolean(), any(MimeType.class));
+    }
+
+    @Test
+    public void testAddWithComplexPattern() throws MimeTypeException {
+        String pattern = "[a-z]*.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).addExtension(eq("txt"));
+        verify(patterns, never()).addName(anyString(), any(MimeType.class));
+        verify(patterns, never()).addExtension(anyString(), any(MimeType.class));
+        verify(patterns, times(1)).addGlob(eq(pattern), eq(mimeType));
+    }
+
+    @Test
+    public void testAddWithComplexPatternAndBoolean() throws MimeTypeException {
+        String pattern = "[a-z]*.txt";
+        when(mimeType.getType()).thenReturn(MediaType.parse("text/plain"));
+        patterns.add(pattern, true, mimeType);
+        verify(registry, times(1)).getDefaultRegistry();
+        verify(mimeType, times(1)).addExtension(eq("txt"));
+        verify(patterns, never()).addName(anyString(), any(MimeType.class));
+        verify(patterns, never()).addExtension(anyString(), any(MimeType.class));
+    }
+}
+
+--------------------------------------------
+Error in Patterns_add_0_0_Test: line 42 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 43 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 44 : method addGlob in class org.apache.tika.mime.Patterns cannot be applied to given types;
+  required: java.lang.String,org.apache.tika.mime.MimeType
+  found:    java.lang.String,boolean,org.apache.tika.mime.MimeType
+  reason: actual and formal argument lists differ in length
+Error in Patterns_add_0_0_Test: line 66 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 67 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 68 : addGlob(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 78 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 79 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 80 : method addGlob in class org.apache.tika.mime.Patterns cannot be applied to given types;
+  required: java.lang.String,org.apache.tika.mime.MimeType
+  found:    java.lang.String,boolean,org.apache.tika.mime.MimeType
+  reason: actual and formal argument lists differ in length
+Error in Patterns_add_0_0_Test: line 90 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 91 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 92 : method addGlob in class org.apache.tika.mime.Patterns cannot be applied to given types;
+  required: java.lang.String,org.apache.tika.mime.MimeType
+  found:    java.lang.String,boolean,org.apache.tika.mime.MimeType
+  reason: actual and formal argument lists differ in length
+Error in Patterns_add_0_0_Test: line 102 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 103 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 104 : addGlob(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 114 : addName(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns
+Error in Patterns_add_0_0_Test: line 115 : addExtension(java.lang.String,org.apache.tika.mime.MimeType) has private access in org.apache.tika.mime.Patterns

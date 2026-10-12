@@ -34,6 +34,13 @@
   <name>Apache Tika core</name>
   <url>https://tika.apache.org/</url>
 
+  <properties>
+    <!-- IFT3913 tache 2 : surchargeable en ligne de commande, ex. -Dchatunitest.testNumber=5 -->
+    <chatunitest.testNumber>2</chatunitest.testNumber>
+    <pit.generatedTests>org.apache.tika.*_*_Test</pit.generatedTests>
+    <pit.manualTests>org.apache.tika.*MutationTest</pit.manualTests>
+  </properties>
+
   <dependencies>
     <!-- See https://issues.apache.org/jira/browse/TIKA-2566 for more info -->
     <dependency>
@@ -119,6 +126,29 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <!-- IFT3913 tache 2 : requis par pitest-junit5-plugin pour decouvrir les tests -->
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- IFT3913 tache 2 : utilises par les tests generes par ChatUniTest -->
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito-junit-jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -146,6 +176,9 @@
               <testSourceDirectories>${project.basedir}/src/test/java</testSourceDirectories>
               <violationSeverity>error</violationSeverity>
               <failOnViolation>true</failOnViolation>
+              <!-- IFT3913 tache 2 : tests generes par ChatUniTest conserves tels quels
+                   (imports avec etoile interdits par checkstyle.xml) -->
+              <excludes>**/*_Test.java</excludes>
             </configuration>
             <goals>
               <goal>check</goal>
@@ -289,6 +322,60 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <!-- IFT3913 tache 2 : analyse de mutation -->
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.30.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>1.2.3</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <targetClasses>
+            <param>org.apache.tika.io.EndianUtils</param>
+            <param>org.apache.tika.mime.MediaType</param>
+            <param>org.apache.tika.mime.Patterns</param>
+          </targetClasses>
+          <targetTests>
+            <param>org.apache.tika.io.EndianUtilsTest</param>
+            <param>org.apache.tika.mime.MediaTypeTest</param>
+            <param>org.apache.tika.mime.PatternsTest</param>
+            <!-- tests generes par ChatUniTest (noms Classe_methode_i_j_Test) ;
+                 -Dpit.generatedTests=aucun pour ne mesurer que les tests originaux -->
+            <param>${pit.generatedTests}</param>
+            <!-- tests ecrits a la main (XxxMutationTest) ; -Dpit.manualTests=aucun pour les exclure -->
+            <param>${pit.manualTests}</param>
+          </targetTests>
+          <outputFormats>
+            <param>HTML</param>
+            <param>CSV</param>
+          </outputFormats>
+          <timestampedReports>false</timestampedReports>
+        </configuration>
+      </plugin>
+      <plugin>
+        <!-- IFT3913 tache 2 : generation de tests par LLM local (Ollama).
+             "code-llama" est un alias Ollama de qwen2.5-coder:7b avec num_ctx=16384,
+             car ChatUniTest n'accepte qu'une liste fixe de noms de modeles. -->
+        <groupId>io.github.zju-aces-ise</groupId>
+        <artifactId>chatunitest-maven-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <apiKeys>ollama</apiKeys>
+          <model>code-llama</model>
+          <url>http://localhost:11434/v1/chat/completions</url>
+          <testNumber>${chatunitest.testNumber}</testNumber>
+          <maxRounds>3</maxRounds>
+          <enableMultithreading>true</enableMultithreading>
+          <maxThreads>2</maxThreads>
+          <testOutput>${project.basedir}/chatunitest-tests</testOutput>
+          <tmpOutput>${project.build.directory}/chatunitest-info</tmpOutput>
+        </configuration>
       </plugin>
     </plugins>
   </build>

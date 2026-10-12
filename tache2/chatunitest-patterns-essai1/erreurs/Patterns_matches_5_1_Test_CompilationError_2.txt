@@ -1,0 +1,174 @@
+package org.apache.tika.mime;
+
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class Patterns_matches_5_1_Test {
+
+    @Mock
+    private MediaTypeRegistry registry;
+
+    @Mock
+    private MimeType mimeType;
+
+    private Patterns patterns;
+
+    @BeforeEach
+    public void setUp() {
+        patterns = new Patterns(registry);
+        try {
+            Field namesField = Patterns.class.getDeclaredField("names");
+            namesField.setAccessible(true);
+            namesField.set(patterns, new HashMap<>());
+            Field extensionsField = Patterns.class.getDeclaredField("extensions");
+            extensionsField.setAccessible(true);
+            extensionsField.set(patterns, new HashMap<>());
+            Field globsField = Patterns.class.getDeclaredField("globs");
+            globsField.setAccessible(true);
+            globsField.set(patterns, new TreeMap<>(new LengthComparator()));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMatchesExactMatch() {
+        try {
+            Field namesField = Patterns.class.getDeclaredField("names");
+            namesField.setAccessible(true);
+            namesField.set(patterns, new HashMap<>());
+            ((Map<String, MimeType>) namesField.get(patterns)).put("text/plain", mimeType);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        MimeType result = patterns.matches("text/plain");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        try {
+            Field namesField = Patterns.class.getDeclaredField("names");
+            namesField.setAccessible(true);
+            assertEquals(1, ((Map<String, MimeType>) namesField.get(patterns)).size());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMatchesExtensionMatch() {
+        try {
+            Field extensionsField = Patterns.class.getDeclaredField("extensions");
+            extensionsField.setAccessible(true);
+            extensionsField.set(patterns, new HashMap<>());
+            ((Map<String, MimeType>) extensionsField.get(patterns)).put(".txt", mimeType);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        MimeType result = patterns.matches("example.txt");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        try {
+            Field extensionsField = Patterns.class.getDeclaredField("extensions");
+            extensionsField.setAccessible(true);
+            assertEquals(1, ((Map<String, MimeType>) extensionsField.get(patterns)).size());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMatchesGlobMatch() {
+        try {
+            Field globsField = Patterns.class.getDeclaredField("globs");
+            globsField.setAccessible(true);
+            globsField.set(patterns, new TreeMap<>(new LengthComparator()));
+            ((SortedMap<String, MimeType>) globsField.get(patterns)).put(".*\\.txt", mimeType);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        MimeType result = patterns.matches("example.txt");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        try {
+            Field globsField = Patterns.class.getDeclaredField("globs");
+            globsField.setAccessible(true);
+            assertEquals(1, ((SortedMap<String, MimeType>) globsField.get(patterns)).size());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMatchesNoMatch() {
+        MimeType result = patterns.matches("example.txt");
+        assertNull(result);
+        verify(registry, never()).getTypes();
+        try {
+            Field namesField = Patterns.class.getDeclaredField("names");
+            namesField.setAccessible(true);
+            assertEquals(0, ((Map<String, MimeType>) namesField.get(patterns)).size());
+            Field extensionsField = Patterns.class.getDeclaredField("extensions");
+            extensionsField.setAccessible(true);
+            assertEquals(0, ((Map<String, MimeType>) extensionsField.get(patterns)).size());
+            Field globsField = Patterns.class.getDeclaredField("globs");
+            globsField.setAccessible(true);
+            assertEquals(0, ((SortedMap<String, MimeType>) globsField.get(patterns)).size());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class LengthComparator implements Comparator<String> {
+}
+
+--------------------------------------------
+Error in Patterns_matches_5_1_Test: line 33 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 36 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 39 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 50 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 61 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 72 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 83 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 94 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 105 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 119 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 122 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 125 : cannot find symbol
+  symbol:   class Field
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 134 : org.apache.tika.mime.LengthComparator is not abstract and does not override abstract method compare(java.lang.String,java.lang.String) in java.util.Comparator

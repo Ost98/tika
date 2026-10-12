@@ -1,0 +1,102 @@
+package org.apache.tika.mime;
+
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.mockito.*;
+import org.junit.jupiter.api.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class Patterns_matches_5_1_Test {
+
+    @Mock
+    private MediaTypeRegistry registry;
+
+    @Mock
+    private MimeType mimeType;
+
+    private Patterns patterns;
+
+    @BeforeEach
+    public void setUp() {
+        patterns = new Patterns(registry);
+        patterns.names = new HashMap<>();
+        patterns.extensions = new HashMap<>();
+        patterns.globs = new TreeMap<>(new LengthComparator());
+    }
+
+    @Test
+    public void testMatchesExactMatch() {
+        patterns.names.put("text/plain", mimeType);
+        MimeType result = patterns.matches("text/plain");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        verify(patterns.names, times(1)).containsKey("text/plain");
+        verify(patterns.names, times(1)).get("text/plain");
+    }
+
+    @Test
+    public void testMatchesExtensionMatch() {
+        patterns.extensions.put(".txt", mimeType);
+        MimeType result = patterns.matches("example.txt");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        verify(patterns.names, times(1)).containsKey("example.txt");
+        verify(patterns.extensions, times(1)).containsKey(".txt");
+        verify(patterns.extensions, times(1)).get(".txt");
+    }
+
+    @Test
+    public void testMatchesGlobMatch() {
+        patterns.globs.put(".*\\.txt", mimeType);
+        MimeType result = patterns.matches("example.txt");
+        assertEquals(mimeType, result);
+        verify(registry, never()).getTypes();
+        verify(patterns.names, times(1)).containsKey("example.txt");
+        verify(patterns.extensions, times(1)).containsKey(".txt");
+        verify(patterns.globs, times(1)).containsKey(".*\\.txt");
+        verify(patterns.globs, times(1)).get(".*\\.txt");
+    }
+
+    @Test
+    public void testMatchesNoMatch() {
+        MimeType result = patterns.matches("example.txt");
+        assertNull(result);
+        verify(registry, never()).getTypes();
+        verify(patterns.names, times(1)).containsKey("example.txt");
+        verify(patterns.extensions, times(1)).containsKey(".txt");
+        verify(patterns.globs, times(1)).containsKey(".*\\.txt");
+    }
+}
+
+--------------------------------------------
+Error in Patterns_matches_5_1_Test: line 32 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 33 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 34 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 34 : cannot find symbol
+  symbol:   class LengthComparator
+  location: class org.apache.tika.mime.Patterns_matches_5_1_Test
+Error in Patterns_matches_5_1_Test: line 39 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 43 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 44 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 49 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 53 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 54 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 55 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 60 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 64 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 65 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 66 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 67 : globs has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 75 : names has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 76 : extensions has private access in org.apache.tika.mime.Patterns
+Error in Patterns_matches_5_1_Test: line 77 : globs has private access in org.apache.tika.mime.Patterns
